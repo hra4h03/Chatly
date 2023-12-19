@@ -1,0 +1,17 @@
+{
+  "name": "chat-application",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "shared": "pnpm --filter shared",
+    "client": "pnpm --filter client",
+    "server": "pnpm --filter server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "engines": {
+    "node": ">=19.1.0"
+  }
+}

@@ -12,6 +12,7 @@ import { CreateMessageDto } from 'src/chat-room/dto/message/create-message.dto';
 import { User } from 'src/user/entities/user.entity';
 import { ChatRoomService } from './chat-room.service';
 import { Logger } from '@nestjs/common';
+import { UserDto } from '../user/dto/user.dto';
 
 @WebSocketGateway()
 @UseBasicAuthGuard()
@@ -39,7 +40,7 @@ export class ChatRoomGateway implements OnGatewayConnection {
     ) {
         client.join(chatRoomId);
         this.chatRoomService.join(user, chatRoomId);
-        client.to(chatRoomId).emit('new-participant', user);
+        client.to(chatRoomId).emit('new-participant', UserDto.fromEntity(user));
     }
 
     @SubscribeMessage('post-message')

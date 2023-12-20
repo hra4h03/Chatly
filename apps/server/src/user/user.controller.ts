@@ -1,19 +1,54 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { UserService } from './user.service';
+import {
+    Controller,
+    Get,
+    HttpStatus,
+    ParseFilePipeBuilder,
+    Post,
+    UploadedFile,
+    UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { UseBasicAuthGuard } from 'src/auth/guards/basic-auth.guard';
+import { FileUploadService } from 'src/file-upload/file-upload.service';
+import { ProfileUploadDto } from 'src/user/dto/profile.dto';
+import { UserDto } from 'src/user/dto/user.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Controller('user')
 @ApiTags('User')
+@UseBasicAuthGuard()
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+    constructor(private readonly fileUploadService: FileUploadService) {}
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.userService.findOne(+id);
+    @Get('me')
+    me(@CurrentUser() user: User): UserDto {
+        return UserDto.fromEntity(user);
     }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.userService.remove(+id);
+    @Post('profile')
+    @UseInterceptors(FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        description: 'List of cats',
+        type: ProfileUploadDto,
+    })
+    updateProfile(
+        @UploadedFile(
+            new ParseFilePipeBuilder()
+                .addFileTypeValidator({
+                    fileType: 'jpeg',
+                })
+                .addMaxSizeValidator({
+                    maxSize: 1024 * 1024,
+                })
+                .build({
+                    errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+                }),
+        )
+        file: Express.Multer.File,
+    ) {
+        return this.fileUploadService.store(file);
     }
 }

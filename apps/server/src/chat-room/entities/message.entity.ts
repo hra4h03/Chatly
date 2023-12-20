@@ -1,23 +1,24 @@
+import { User } from 'src/user/entities/user.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 export class Message {
     static create(fields: {
-        ownerId: string;
+        owner: User;
         content: string;
         chatRoomId: string;
     }) {
-        return new Message(fields.ownerId, fields.content, fields.chatRoomId);
+        return new Message(fields.owner, fields.chatRoomId, fields.content);
     }
 
     uuid: string;
-    ownerId: string;
+    owner: User;
     content: string;
     chatRoomId: string;
     timestamp: Date;
 
-    constructor(ownerId: string, chatRoomId: string, content: string) {
+    constructor(owner: User, chatRoomId: string, content: string) {
         this.uuid = uuidv4();
-        this.ownerId = ownerId;
+        this.owner = owner;
         this.content = content;
         this.chatRoomId = chatRoomId;
         this.timestamp = new Date();

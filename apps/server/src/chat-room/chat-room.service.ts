@@ -27,12 +27,12 @@ export class ChatRoomService {
         return room;
     }
 
-    newMessage(user: User, chatRoomName: string, message: string) {
-        const chatRoom = this.chatRoomRepository.findByUuid(chatRoomName);
+    newMessage(user: User, chatRoomUuid: string, content: string) {
+        const chatRoom = this.chatRoomRepository.findByUuid(chatRoomUuid);
         if (!chatRoom) throw new NotFoundException();
 
-        chatRoom.addMessage(user, message);
+        const message = chatRoom.addMessage(user, content);
 
-        return chatRoom;
+        return message;
     }
 }

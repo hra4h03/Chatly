@@ -1,4 +1,5 @@
 import { Message } from 'src/chat-room/entities/message.entity';
+import { UserDto } from 'src/user/dto/user.dto';
 
 export class MessageDto {
     static fromEntity(entity: Message | Message[]) {
@@ -6,16 +7,16 @@ export class MessageDto {
             return entity.map((e) => MessageDto.fromEntity(e));
         }
         const dto = new MessageDto();
-        dto.id = entity.uuid;
-        dto.userId = entity.ownerId;
+        dto.uuid = entity.uuid;
+        dto.owner = UserDto.fromEntity(entity.owner);
         dto.content = entity.content;
         dto.chatRoomId = entity.chatRoomId;
         dto.timestamp = entity.timestamp;
         return dto;
     }
 
-    id: string;
-    userId: string;
+    uuid: string;
+    owner: UserDto;
     content: string;
     chatRoomId: string;
     timestamp: Date;

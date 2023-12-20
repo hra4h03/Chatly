@@ -1,0 +1,19 @@
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #5a585a #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*:not(.MuiTablePagination-root)::-webkit-scrollbar {
+    width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #5a585a;
+    border-radius: 25px;
+    border: 1px solid #ffffff;
+}

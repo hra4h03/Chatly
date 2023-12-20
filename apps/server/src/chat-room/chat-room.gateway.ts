@@ -1,23 +1,29 @@
+import { Logger } from '@nestjs/common';
 import {
     ConnectedSocket,
     MessageBody,
     OnGatewayConnection,
     SubscribeMessage,
     WebSocketGateway,
+    WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UseBasicAuthGuard } from 'src/auth/guards/basic-auth.guard';
 import { CreateMessageDto } from 'src/chat-room/dto/message/create-message.dto';
+import { Message } from 'src/chat-room/entities/message.entity';
 import { User } from 'src/user/entities/user.entity';
 import { ChatRoomService } from './chat-room.service';
-import { Logger } from '@nestjs/common';
-import { UserDto } from '../user/dto/user.dto';
+import { MessageDto } from 'src/chat-room/dto/message/message.dto';
 
-@WebSocketGateway()
+@WebSocketGateway({
+    cors: true,
+})
 @UseBasicAuthGuard()
 export class ChatRoomGateway implements OnGatewayConnection {
     private readonly logger = new Logger(ChatRoomGateway.name);
+    @WebSocketServer()
+    private server: Server;
 
     constructor(private readonly chatRoomService: ChatRoomService) {}
 
@@ -40,23 +46,29 @@ export class ChatRoomGateway implements OnGatewayConnection {
     ) {
         client.join(chatRoomId);
         this.chatRoomService.join(user, chatRoomId);
-        client.to(chatRoomId).emit('new-participant', UserDto.fromEntity(user));
+
+        const newMessage = Message.create({
+            owner: user,
+            chatRoomId: chatRoomId,
+            content: `${user.name} joined the room`,
+        });
+        this.server
+            .to(chatRoomId)
+            .emit('new-message', MessageDto.fromEntity(newMessage));
     }
 
     @SubscribeMessage('post-message')
     postMessage(
         @CurrentUser() user: User,
         @MessageBody() createMessageDto: CreateMessageDto,
-        @ConnectedSocket() client: Socket,
     ) {
-        this.chatRoomService.newMessage(
+        const message = this.chatRoomService.newMessage(
             user,
             createMessageDto.chatRoomId,
             createMessageDto.content,
         );
-        client.to(createMessageDto.chatRoomId).emit('new-message', {
-            content: createMessageDto.content,
-            owner: user,
-        });
+        this.server
+            .to(createMessageDto.chatRoomId)
+            .emit('new-message', message);
     }
 }

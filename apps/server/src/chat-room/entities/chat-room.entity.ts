@@ -37,11 +37,13 @@ export class ChatRoom {
         }
 
         const newMessage = Message.create({
-            ownerId: user.uuid,
+            owner: user,
             chatRoomId: this.uuid,
             content: message,
         });
 
         this.messages.push(newMessage);
+
+        return newMessage;
     }
 }

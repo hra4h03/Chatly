@@ -12,11 +12,16 @@ export class User {
 
     public uuid: string;
     public name: string;
+    public profilePicture?: string;
     public readonly password: string;
 
     private constructor(name: string, password: string) {
         this.uuid = uuidv4();
         this.name = name;
         this.password = password;
+    }
+
+    addProfilePicture(profilePicture: string) {
+        this.profilePicture = profilePicture;
     }
 }

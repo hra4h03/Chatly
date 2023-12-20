@@ -16,4 +16,13 @@ export class UserService {
             auth: CredentialsService.get(),
         });
     }
+
+    static async uploadProfilePicture(file: File) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        return await HttpClient.post<UserModel>('/user/profile', formData, {
+            auth: CredentialsService.get(),
+        });
+    }
 }

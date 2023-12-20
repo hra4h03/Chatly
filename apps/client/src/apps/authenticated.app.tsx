@@ -2,6 +2,7 @@ import { MainLayout } from '@common/layout/main.layout';
 import { RoutePaths } from '@configs/route/route.config';
 import { ChatRoomPage } from '@pages/chatRoom/chatRoomPage';
 import { HomePage } from '@pages/home/homePage';
+import { SettingsPage } from '@pages/settings/settingsPage';
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
 
 const authenticatedRoutes: RouteObject[] = [
@@ -16,6 +17,10 @@ const authenticatedRoutes: RouteObject[] = [
             {
                 path: RoutePaths.room(),
                 element: <ChatRoomPage />,
+            },
+            {
+                path: RoutePaths.settings(),
+                element: <SettingsPage />,
             },
         ],
     },

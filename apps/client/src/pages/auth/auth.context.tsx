@@ -10,6 +10,7 @@ const AuthContext = createContext({
     user: null as UserModel | null | false,
     async login(_input: LoginModel): Promise<void> {},
     async signup(_input: SignupModel): Promise<void> {},
+    async load(): Promise<void> {},
     logout() {},
 });
 
@@ -22,18 +23,18 @@ function AuthProvider({ children }: React.PropsWithChildren<unknown>) {
     const [user, setUser] = useState<UserModel | null | false>(null);
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await UserService.me();
-                setUser(response.data);
-            } catch (error) {
-                CredentialsService.clear();
-                setUser(false);
-            }
-        };
-
-        fetchUser();
+        load();
     }, []);
+
+    const load = async () => {
+        try {
+            const response = await UserService.me();
+            setUser(response.data);
+        } catch (error) {
+            CredentialsService.clear();
+            setUser(false);
+        }
+    };
 
     const login = async (input: LoginModel): Promise<void> => {
         try {
@@ -66,6 +67,7 @@ function AuthProvider({ children }: React.PropsWithChildren<unknown>) {
                 signup,
                 logout,
                 login,
+                load,
                 user,
             }}
         >

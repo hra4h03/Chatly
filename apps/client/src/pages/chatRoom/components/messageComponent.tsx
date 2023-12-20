@@ -1,4 +1,5 @@
 import { Message } from '@api/models';
+import { UserAvatar } from '@common/avatar/userAvatar';
 import { AccountCircleRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
@@ -19,6 +20,7 @@ export function MessageBox(props: MessageBoxProps) {
                     display: 'flex',
                     flexDirection: isOwner ? 'row' : 'row-reverse',
                     alignItems: '',
+                    gap: '10px',
                     maxWidth: '400px',
                 }}
             >
@@ -32,7 +34,11 @@ export function MessageBox(props: MessageBoxProps) {
                         {message.owner.name}
                     </Typography>
                 </Box>
-                <AccountCircleRounded fontSize="large" color="primary" />
+                <UserAvatar
+                    typography={{ variant: 'caption' }}
+                    user={message.owner}
+                    sx={{ width: '30px', height: '30px' }}
+                />
             </Box>
         </Box>
     );

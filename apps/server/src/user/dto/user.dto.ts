@@ -8,9 +8,11 @@ export class UserDto {
         const dto = new UserDto();
         dto.uuid = entity.uuid;
         dto.name = entity.name;
+        dto.profilePicture = entity.profilePicture;
         return dto;
     }
 
     uuid: string;
     name: string;
+    profilePicture?: string;
 }

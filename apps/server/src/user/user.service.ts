@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-    findOne(id: number) {
-        return `This action returns a #${id} user`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} user`;
+    addProfilePicture(user: User, file: Express.Multer.File) {
+        user.addProfilePicture(file.filename);
+        return user;
     }
 }

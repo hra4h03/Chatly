@@ -38,7 +38,7 @@ export function MessageBox(props: MessageBoxProps) {
                         </Typography>
                     </Box>
                     <Typography fontSize={11} textAlign={isOwner ? 'right' : 'left'}>
-                        {message.owner.name}
+                        {message.owner.name} {new Date(message.timestamp).toLocaleTimeString()}
                     </Typography>
                 </Box>
                 <UserAvatar

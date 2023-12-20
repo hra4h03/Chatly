@@ -28,32 +28,26 @@ export function HomePage() {
     });
 
     return (
-        <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} p={2}>
-            <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
-                <Grid container spacing={2} justifyContent={'center'} alignItems={'center'}>
-                    <Grid item xs={12}>
-                        <TextField
-                            autoComplete="off"
-                            size="small"
-                            margin="dense"
-                            variant="outlined"
-                            fullWidth
-                            id="name"
-                            label="Room Name"
-                            name="name"
-                            autoFocus
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            error={formik.touched.name && Boolean(formik.errors.name)}
-                            helperText={formik.touched.name && formik.errors.name}
-                        />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Button variant="contained" type="submit" endIcon={<AddRounded fontSize="large" />}>
-                            Join
-                        </Button>
-                    </Grid>
-                </Grid>
+        <Box display={'flex'} justifyContent={'center'} alignItems={'center'} p={2}>
+            <form onSubmit={formik.handleSubmit} style={{ width: '300px', textAlign: 'center' }}>
+                <TextField
+                    autoComplete="off"
+                    size="small"
+                    margin="dense"
+                    variant="outlined"
+                    fullWidth
+                    id="name"
+                    label="Room Name"
+                    name="name"
+                    autoFocus
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
+                />
+                <Button variant="contained" type="submit" endIcon={<AddRounded fontSize="large" />}>
+                    Join
+                </Button>
             </form>
         </Box>
     );

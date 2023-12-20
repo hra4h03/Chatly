@@ -26,6 +26,11 @@ export function ChatRoomPage() {
         setMessage('');
     };
 
+    const handleDisconnect = () => {
+        socket!.emit('leave-room', params.uuid);
+        navigate(RoutePaths.home());
+    };
+
     useEffect(() => {
         if (dummy.current) {
             dummy.current.scrollIntoView({ behavior: 'smooth' });
@@ -75,7 +80,12 @@ export function ChatRoomPage() {
                 >
                     Copy Room Link
                 </Button>
-                <Box>{socket?.connected ? '🟢' : '🔴'}</Box>
+                <Box display={'flex'} alignItems={'center'}>
+                    <Box>{socket?.connected ? '🟢' : '🔴'}</Box>
+                    <Button variant="outlined" onClick={handleDisconnect}>
+                        Leave Room
+                    </Button>
+                </Box>
             </Paper>
             <Box display={'flex'} flexDirection={'column'}>
                 <Box
@@ -103,8 +113,11 @@ export function ChatRoomPage() {
                         autoFocus
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        onKeyUp={(e) => {
-                            e.key === 'Enter' && postMessage(message);
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                postMessage(message);
+                                e.preventDefault();
+                            }
                         }}
                     />
                     <IconButton

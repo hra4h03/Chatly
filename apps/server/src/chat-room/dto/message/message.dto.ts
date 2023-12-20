@@ -1,4 +1,5 @@
 import { Message } from 'src/chat-room/entities/message.entity';
+import { MessageType } from 'src/chat-room/entities/message.enum';
 import { UserDto } from 'src/user/dto/user.dto';
 
 export class MessageDto {
@@ -12,6 +13,7 @@ export class MessageDto {
         dto.content = entity.content;
         dto.chatRoomId = entity.chatRoomId;
         dto.timestamp = entity.timestamp;
+        dto.type = entity.type;
         return dto;
     }
 
@@ -20,4 +22,5 @@ export class MessageDto {
     content: string;
     chatRoomId: string;
     timestamp: Date;
+    type: MessageType;
 }

@@ -35,4 +35,13 @@ export class ChatRoomService {
 
         return message;
     }
+
+    leave(user: User, chatRoomUuid: string) {
+        const chatRoom = this.chatRoomRepository.findByUuid(chatRoomUuid);
+        if (!chatRoom) throw new NotFoundException();
+
+        chatRoom.leaveRoom(user);
+
+        return chatRoom;
+    }
 }

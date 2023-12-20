@@ -15,6 +15,7 @@ import { Message } from 'src/chat-room/entities/message.entity';
 import { User } from 'src/user/entities/user.entity';
 import { ChatRoomService } from './chat-room.service';
 import { MessageDto } from 'src/chat-room/dto/message/message.dto';
+import { MessageType } from 'src/chat-room/entities/message.enum';
 
 @WebSocketGateway({
     cors: true,
@@ -51,7 +52,30 @@ export class ChatRoomGateway implements OnGatewayConnection {
             owner: user,
             chatRoomId: chatRoomId,
             content: `${user.name} joined the room`,
+            messageType: MessageType.ADMINISTRATIVE,
         });
+
+        this.server
+            .to(chatRoomId)
+            .emit('new-message', MessageDto.fromEntity(newMessage));
+    }
+
+    @SubscribeMessage('leave-room')
+    leaveRoom(
+        @CurrentUser() user: User,
+        @MessageBody() chatRoomId: string,
+        @ConnectedSocket() client: Socket,
+    ) {
+        client.leave(chatRoomId);
+        this.chatRoomService.leave(user, chatRoomId);
+
+        const newMessage = Message.create({
+            owner: user,
+            chatRoomId: chatRoomId,
+            content: `${user.name} leaved the room`,
+            messageType: MessageType.ADMINISTRATIVE,
+        });
+
         this.server
             .to(chatRoomId)
             .emit('new-message', MessageDto.fromEntity(newMessage));

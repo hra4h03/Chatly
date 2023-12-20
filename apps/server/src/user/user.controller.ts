@@ -34,7 +34,7 @@ export class UserController {
     @UseInterceptors(
         FileInterceptor('file', {
             storage: diskStorage({
-                destination: './uploads',
+                destination: './uploads', // ideally separate this config in multer module
                 filename: (req, file, callback) => {
                     const ext = path.extname(file.originalname);
                     callback(null, uuidv4() + ext);
@@ -43,19 +43,12 @@ export class UserController {
         }),
     )
     @ApiConsumes('multipart/form-data')
-    @ApiBody({
-        description: 'List of cats',
-        type: ProfileUploadDto,
-    })
+    @ApiBody({ type: ProfileUploadDto })
     updateProfile(
         @UploadedFile(
             new ParseFilePipeBuilder()
-                .addFileTypeValidator({
-                    fileType: 'jpeg',
-                })
-                .addMaxSizeValidator({
-                    maxSize: 1024 * 1024,
-                })
+                .addFileTypeValidator({ fileType: 'jpeg' })
+                .addMaxSizeValidator({ maxSize: 1024 * 1024 })
                 .build({
                     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
                 }),

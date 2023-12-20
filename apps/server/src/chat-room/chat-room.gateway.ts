@@ -48,6 +48,7 @@ export class ChatRoomGateway implements OnGatewayConnection {
         client.join(chatRoomId);
         this.chatRoomService.join(user, chatRoomId);
 
+        // temporary message: visible only to already joined users
         const newMessage = Message.create({
             owner: user,
             chatRoomId: chatRoomId,
@@ -69,6 +70,7 @@ export class ChatRoomGateway implements OnGatewayConnection {
         client.leave(chatRoomId);
         this.chatRoomService.leave(user, chatRoomId);
 
+        // temporary message: visible only to already joined users
         const newMessage = Message.create({
             owner: user,
             chatRoomId: chatRoomId,

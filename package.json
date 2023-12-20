@@ -1,14 +1,13 @@
 {
   "name": "chat-application",
   "version": "1.0.0",
-  "description": "",
+  "description": "Chatly is a chat application built with React, Nest, Express, and Socket.io",
   "scripts": {
-    "shared": "pnpm --filter shared",
     "client": "pnpm --filter client",
     "server": "pnpm --filter server"
   },
   "keywords": [],
-  "author": "",
+  "author": "Hrach Hovakimyan",
   "license": "ISC",
   "type": "module",
   "engines": {
